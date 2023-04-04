@@ -1,0 +1,58 @@
+@model WallnutCookiesDelivery.Web.ViewModels.MenuViewModel
+
+<h2>Prima Mensa's Homemade Oreshki</h2>
+
+<h4>Products</h4>
+
+<a asp-asp-controller="Product" asp-action="Create">Add Product</a>
+
+<form method="post">
+
+    <hr />
+    <table class="table">
+        <thread>
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Price
+                </th>
+            </tr>
+        </thread>
+        <tbody>
+            @if (Model.Products != null)
+            {
+                @foreach (var product in Model.Products)
+                {
+                    <tr>
+                        <td>
+                            @product.Id
+                        </td>
+                        <td>
+                            @product.Name
+                        </td>
+                        <td>
+                            @product.Description
+                        </td>
+                        <td>
+                            @product.Price
+                        </td>
+                        <td>
+                            <a href="Product/Edit/@product.Id">Edit</a>
+                        </td>
+                         <td>
+                            <a href="Product/Delete/@product.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</form>
