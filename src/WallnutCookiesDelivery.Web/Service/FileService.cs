@@ -9,13 +9,17 @@ public class FileService : IFileService
     {
         _webHostEnvironment = webHostEnvironment;
     }
+
     public string UploadImage(IFormFile image)
     {
         if (image.FileName != null)
         {
             var fileName = Path.GetFileNameWithoutExtension(image.FileName) + "_" + Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
             var path = Path.Combine(_webHostEnvironment.WebRootPath + "/images/Oreshki/", fileName);
-            image.CopyTo(new FileStream(path, FileMode.Create));
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                image.CopyTo(fileStream);
+            }
             return fileName;
         }
         return FileNotFoundException("You haven't included a file");
@@ -23,18 +27,20 @@ public class FileService : IFileService
 
     public string UpdateImage(IFormFile image, string imageUrl)
     {
-        
-        if (image.FileName != null)
+        if (image.FileName != null && image.FileName != null)
         {
             var localFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "Oreshki", imageUrl);
             if (File.Exists(localFolderPath))
             {
                 File.Delete(localFolderPath);
             }
-            
             var fileName = Path.GetFileNameWithoutExtension(image.FileName) + "_" + Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
             var path = Path.Combine(_webHostEnvironment.WebRootPath + "/images/Oreshki/", fileName);
-            image.CopyTo(new FileStream(path, FileMode.Create));
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                image.CopyTo(fileStream);
+            }
+            return fileName;
         }
         return imageUrl;
     }
@@ -48,7 +54,7 @@ public class FileService : IFileService
         }
         return imageUrl;
     }
-
+    
     private string FileNotFoundException(string message)
     {
         return message;

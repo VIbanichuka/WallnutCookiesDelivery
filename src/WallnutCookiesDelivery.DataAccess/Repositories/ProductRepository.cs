@@ -4,38 +4,36 @@ using WallnutCookiesDelivery.DataAccess.Data;
 
 namespace WallnutCookiesDelivery.DataAccess.Repositories;
 
-
-public class ProductRepository: IProductRepository
+public class ProductRepository : IProductRepository
 {
     private readonly ApplicationDbContext _context;
     public ProductRepository(ApplicationDbContext context)
     {
         _context = context;
     }
-
-    void IProductRepository.Create(Product product)
+    public void Create(Product product)
     {
         _context.Products.Add(product);
         _context.SaveChanges();
     }
 
-    void IProductRepository.Delete(Product product)
+    public void Delete(Product product)
     {
         _context.Products.Remove(product);
         _context.SaveChanges();
     }
 
-    Product IProductRepository.GetProductById(int id)
+    public Product GetProductById(int id)
     {
-        return _context.Products.Find(id);
+        return _context.Products.FirstOrDefault(p => p.ProductId == id);
     }
 
-    List<Product> IProductRepository.GetProductList()
+    public List<Product> GetProductList()
     {
         return _context.Products.ToList();
     }
 
-    void IProductRepository.Update(Product product)
+    public void Update(Product product)
     {
         _context.Products.Update(product);
         _context.SaveChanges();

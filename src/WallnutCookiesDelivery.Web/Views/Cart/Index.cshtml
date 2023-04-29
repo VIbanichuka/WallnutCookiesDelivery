@@ -1,0 +1,66 @@
+@model WallnutCookiesDelivery.Web.ViewModels.CartViewModel
+
+<h4>Prima Mensa's Cart</h4>
+
+<form method="post">
+    <hr />
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Product Image
+                </th>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    Product Description
+                </th>
+                <th>
+                    Qty
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.CartItems != null)
+            {
+                @foreach (var cartItem in Model.CartItems)
+                {
+                    <tr>
+                        <td>
+                            <img decoding="async" src="@("~/images/Oreshki/" + cartItem.Product.ImageUrl)"
+                        asp-append-version="true" width="80px" height="100px" />
+                        </td>
+                        <td>
+                            @cartItem.Product.Name
+                        </td>
+                        <td>
+                            @cartItem.Product.Description
+                        </td>
+                        <td>
+                            @cartItem.Quantity
+                        </td>
+                        <td>
+                            @cartItem.Quantity * @cartItem.UnitPrice.ToString("c")
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-info">+</button>
+                            <button type="submit" class="btn btn-info">-</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+
+            </tr>
+        </tfoot>
+    </table>
+</form>

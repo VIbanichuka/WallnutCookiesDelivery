@@ -1,10 +1,15 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace WallnutCookiesDelivery.Core.Entities;
 
 public class Cart
 {
     public Cart()
     {
-        CartItems = new List<CartItem>();
+        CartItems = new HashSet<CartItem>();
     }
-    public List<CartItem> CartItems { get; set; }
+    [Key]
+    public int CartId { get; set; }
+    public string UserName { get; set; }
+    public virtual ICollection<CartItem> CartItems { get; set; }
 }
