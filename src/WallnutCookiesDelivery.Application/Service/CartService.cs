@@ -15,28 +15,68 @@ public class CartService : ICartService
         _productRepository = productRepository;
     }
 
-    public void AddItemToCart(string userName, int productId, int quantity)
+    public void AddItemToCart(string userName, int productId, int quantity = 1)
     {
-        throw new NotImplementedException();
+        var product = _productRepository.GetProductById(productId);
+        var cart = GetCartOrCreateCart(userName);
+        var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
+
+        if (cartItem != null)
+        {
+            cartItem.Quantity += quantity;
+        }
+        else
+        {
+            cartItem = new CartItem
+            {
+                ProductId = productId,
+                Quantity = quantity,
+                UnitPrice = product.Price
+            };
+            cart.CartItems.Add(cartItem);
+        }
+        _cartRepository.Add(cart);
     }
 
     public void ClearCart(string userName)
     {
-        throw new NotImplementedException();
+        var cart = _cartRepository.GetCartByUserName(userName);
+        if (cart == null)
+        {
+            throw new ApplicationException("No cart found to clear");
+        }
+        cart.CartItems.Clear();
+        _cartRepository.Update(cart);
     }
 
-    public Cart GetCartByUserName(string userName)
+    public void RemoveCartItem(string userName, int cartItemId)
     {
-        throw new NotImplementedException();
+        var cart = GetCartOrCreateCart(userName);
+        var cartItem = cart.CartItems.FirstOrDefault(ci => ci.CartItemId == cartItemId);
+        if (cartItem != null)
+        {
+            cart.CartItems.Remove(cartItem);
+            _cartRepository.Update(cart);
+        }
     }
 
-    public void RemoveCartItem(int cartId, int cartItemId)
+    private Cart GetCartOrCreateCart(string userName)
     {
-        throw new NotImplementedException();
+        var cart = _cartRepository.GetCartByUserName(userName);
+        if (cart == null)
+        {
+            cart = new Cart
+            {
+                UserName = userName,
+                CartItems = new List<CartItem>()
+            };
+            _cartRepository.Add(cart);
+        }
+        return cart;
     }
 
-    public void UpdateCartItemQuantity(int cartId, int cartItemId, int quantity)
+    public Cart GetUserCart(string userName)
     {
-        throw new NotImplementedException();
+        return _cartRepository.GetUserCart(userName);
     }
 }

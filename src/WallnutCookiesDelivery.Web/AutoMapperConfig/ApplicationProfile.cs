@@ -9,5 +9,7 @@ public class ApplicationProfile: Profile
     public ApplicationProfile()
     {
         CreateMap<Product, ProductModel>().ReverseMap();
+        CreateMap<CartItem, CartItemsModel>().ReverseMap();
+        CreateMap<Cart, CartModel>().ReverseMap();
     }
 }

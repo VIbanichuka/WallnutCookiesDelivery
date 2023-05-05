@@ -4,10 +4,8 @@ namespace WallnutCookiesDelivery.Application.Interfaces.IServices;
 
 public interface ICartService
 {
-    Cart GetCartByUserName(string userName);
     void AddItemToCart(string userName, int productId, int quantity);
-    void RemoveCartItem(int cartId, int cartItemId);
-    void UpdateCartItemQuantity(int cartId, int cartItemId, int quantity);
+    void RemoveCartItem(string userName, int cartItemId);
     void ClearCart(string userName);
-
+    Cart GetUserCart(string userName);
 }
