@@ -3,7 +3,7 @@ namespace WallnutCookiesDelivery.Web.Models;
 
 public class ProductModel
 {
-    public int Id { get; set; }
+    public int ProductId { get; set; }
 
     [Required(ErrorMessage = "Please enter product name")]
     [Display(Name = "Product Name:")]

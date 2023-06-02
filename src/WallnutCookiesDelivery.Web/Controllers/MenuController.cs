@@ -22,5 +22,4 @@ public class MenuController : Controller
         model.Products = _mapper.Map<List<ProductModel>>(menuItems);
         return View(model);
     }
-
 }

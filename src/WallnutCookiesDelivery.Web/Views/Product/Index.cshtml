@@ -2,15 +2,13 @@
 
 <h2>Prima Mensa's Homemade Oreshki</h2>
 
-<h4>Products</h4>
-
 <a asp-asp-controller="Product" asp-action="Create">Add Product</a>
 
 <form method="post">
 
     <hr />
     <table class="table">
-        <thread>
+        <thead>
             <tr>
                 <th>
                     Id
@@ -24,8 +22,10 @@
                 <th>
                     Price
                 </th>
+                <th></th>
+                <th></th>
             </tr>
-        </thread>
+        </thead>
         <tbody>
             @if (Model.Products != null)
             {
@@ -33,7 +33,7 @@
                 {
                     <tr>
                         <td>
-                            @product.Id
+                            @product.ProductId
                         </td>
                         <td>
                             @product.Name
@@ -45,10 +45,10 @@
                             @product.Price
                         </td>
                         <td>
-                            <a href="Product/Edit/@product.Id">Edit</a>
+                            <a href="Product/Edit/@product.ProductId">Edit</a>
                         </td>
                          <td>
-                            <a href="Product/Delete/@product.Id">Delete</a>
+                            <a href="Product/Delete/@product.ProductId">Delete</a>
                         </td>
                     </tr>
                 }

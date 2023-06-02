@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using WallnutCookiesDelivery.Application.Interfaces.IRepositories;
 using WallnutCookiesDelivery.Core.Entities;
 using WallnutCookiesDelivery.DataAccess.Data;
@@ -11,28 +12,37 @@ public class CartRepository : ICartRepository
     {
         _context = context;
     }
-    public void AddItem(int productId, int quantity = 1, decimal unitPrice = 0)
+
+    public void Add(Cart cart)
     {
-        throw new NotImplementedException();
+        _context.Carts.Add(cart);
+        _context.SaveChanges();
     }
 
-    public void ClearItem()
+    public Cart GetCartByUserName(string userName)
     {
-        throw new NotImplementedException();
+        return _context.Carts.FirstOrDefault(c => c.UserName == userName);
     }
 
-    public Cart GetCart()
+    public void Remove(Cart cart)
     {
-        throw new NotImplementedException();
+        _context.Carts.Remove(cart);
+        _context.SaveChanges();
     }
 
-    public void RemoveItem(int cartItemId)
+    public void Update(Cart cart)
     {
-        throw new NotImplementedException();
+        _context.Entry(cart).State = EntityState.Modified;
+        _context.SaveChanges();
     }
 
-    public void RemoveItemWithProduct(int productId)
+    public Cart GetUserCart(string userName)
     {
-        throw new NotImplementedException();
+        var cart = _context.Carts
+                .Include(c => c.CartItems)
+                .ThenInclude(c => c.Product)
+                .Where(c => c.UserName == userName)
+                .FirstOrDefault();
+        return cart;
     }
 }
