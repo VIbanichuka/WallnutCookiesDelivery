@@ -32,3 +32,13 @@ body {
   flex-basis: 60%;
   max-width: 300px;
 }
+
+.header {
+  background-image: url('/images/Header/Seashore Cafe.jpg');
+  height: 337px;
+  background-size: cover;
+}
+
+body{
+  background-color: #DFE4F2;
+}

@@ -26,7 +26,10 @@ public class ProductController : Controller
     public IActionResult Index(MenuViewModel model)
     {
         var products = _productService.GetAllProduct();
-        model.Products = _mapper.Map<List<ProductModel>>(products);
+        if (products != null)
+        {
+            model.Products = _mapper.Map<List<ProductModel>>(products);
+        }
         return View(model);
     }
 
@@ -40,18 +43,18 @@ public class ProductController : Controller
     public IActionResult CreateProduct(MenuViewModel model)
     {
         model.Product.ImageUrl = _fileService.UploadImage(model.Product.ImageFile);
-        var product = _mapper.Map<Product>(model.Product);
-        _productService.Create(product);
+        var newProduct = _mapper.Map<Product>(model.Product);
+        _productService.Create(newProduct);
         return RedirectToAction("Index");
     }
 
     [HttpGet]
     public IActionResult Edit(int id, MenuViewModel model)
     {
-        var product = _productService.GetProductById(id);
-        if (product != null)
+        var existingProduct = _productService.GetProductById(id);
+        if (existingProduct != null)
         {
-            model.Product = _mapper.Map<ProductModel>(product);
+            model.Product = _mapper.Map<ProductModel>(existingProduct);
         }
         return View(model);
     }
@@ -59,26 +62,20 @@ public class ProductController : Controller
     [HttpPost]
     public IActionResult EditProduct(MenuViewModel model, string imageUrl)
     {
-        var productDetails = _productService.GetProductById(model.Product.ProductId);
-        imageUrl = productDetails.ImageUrl;
-        model.Product.ImageUrl = _fileService.UpdateImage(model.Product.ImageFile, imageUrl);
-        
-        productDetails.Description = model.Product.Description;
-        productDetails.Name = model.Product.Name;
-        productDetails.Price = model.Product.Price;
-        productDetails.ImageUrl = model.Product.ImageUrl;
-        
-        _productService.Update(productDetails);
+        var existingProduct = _productService.GetProductById(model.Product.ProductId);
+        model.Product.ImageUrl = _fileService.UpdateImage(model.Product.ImageFile, existingProduct.ImageUrl);
+        _mapper.Map(model.Product, existingProduct);
+        _productService.Update(existingProduct);
         return RedirectToAction("Index");
     }
 
     [HttpGet]
     public IActionResult Delete(int id, MenuViewModel model)
     {
-        var product = _productService.GetProductById(id);
-        if (product != null)
+        var productToDelete = _productService.GetProductById(id);
+        if (productToDelete != null)
         {
-            model.Product = _mapper.Map<ProductModel>(product);
+            model.Product = _mapper.Map<ProductModel>(productToDelete);
         }
         return View(model);
     }
@@ -86,9 +83,12 @@ public class ProductController : Controller
     [HttpPost]
     public IActionResult Delete(int id)
     {
-        var product = _productService.GetProductById(id);
-        _fileService.DeleteImage(product.ImageUrl);
-        _productService.Delete(product);
+        var productToDelete = _productService.GetProductById(id);
+        if(productToDelete != null)
+        {
+            _fileService.DeleteImage(productToDelete.ImageUrl);
+            _productService.Delete(productToDelete);
+        }
         return RedirectToAction("Index");
     }
 }
