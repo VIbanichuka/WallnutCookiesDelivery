@@ -32,7 +32,7 @@ public class CartRepository : ICartRepository
 
     public void Update(Cart cart)
     {
-        _context.Entry(cart).State = EntityState.Modified;
+        _context.Update(cart);
         _context.SaveChanges();
     }
 

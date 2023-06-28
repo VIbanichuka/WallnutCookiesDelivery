@@ -1,6 +1,8 @@
 @model WallnutCookiesDelivery.Web.ViewModels.MenuViewModel
 
-<h2>Prima Mensa's Homemade Oreshki</h2>
+<div class="h4 text-center">
+    <h2>PRIMA MENSA'S HOMEMADE ORESHKI</h2>
+</div>
 
 <a asp-asp-controller="Product" asp-action="Create">Add Product</a>
 
@@ -10,6 +12,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th></th>
                 <th>
                     Id
                 </th>
@@ -33,6 +36,10 @@
                 {
                     <tr>
                         <td>
+                            <img decoding="async" src="@("~/images/Oreshki/" + product.ImageUrl)"
+                        asp-append-version="true" width="60px" height="60px" />
+                        </td>
+                        <td>
                             @product.ProductId
                         </td>
                         <td>
@@ -42,7 +49,7 @@
                             @product.Description
                         </td>
                         <td>
-                            @product.Price
+                            @Math.Round(product.Price,2)
                         </td>
                         <td>
                             <a href="Product/Edit/@product.ProductId">Edit</a>

@@ -47,14 +47,18 @@ public class FileService : IFileService
 
     public string DeleteImage(string imageUrl)
     {
-        var localFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "Oreshki", imageUrl);
-        if (File.Exists(localFolderPath))
+        if (imageUrl != null)
         {
-            File.Delete(localFolderPath);
+            var localFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "Oreshki", imageUrl);
+            if (File.Exists(localFolderPath))
+            {
+                File.Delete(localFolderPath);
+            }
+            return imageUrl;
         }
-        return imageUrl;
+        return FileNotFoundException("You haven't included a file");
     }
-    
+
     private string FileNotFoundException(string message)
     {
         return message;
