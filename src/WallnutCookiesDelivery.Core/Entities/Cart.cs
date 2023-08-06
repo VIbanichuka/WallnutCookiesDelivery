@@ -4,9 +4,10 @@ namespace WallnutCookiesDelivery.Core.Entities;
 
 public class Cart
 {
-    public Cart()
+    public Cart(string userName)
     {
         CartItems = new HashSet<CartItem>();
+        UserName = userName;
     }
     [Key]
     public int CartId { get; set; }

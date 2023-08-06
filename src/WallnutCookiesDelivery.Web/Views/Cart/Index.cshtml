@@ -28,9 +28,9 @@
             </tr>
         </thead>
         <tbody>
-            @if (Model.CartItems != null)
+            @if (Model.Cart.CartItems != null)
             {
-                @foreach (var cartItem in Model.CartItems)
+                @foreach (var cartItem in Model.Cart.CartItems)
                 {
                     <tr>
                         <td>
