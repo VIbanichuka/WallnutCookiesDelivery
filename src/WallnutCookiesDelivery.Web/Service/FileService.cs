@@ -5,6 +5,7 @@ namespace WallnutCookiesDelivery.Web.Service;
 public class FileService : IFileService
 {
     private readonly IWebHostEnvironment _webHostEnvironment;
+
     public FileService(IWebHostEnvironment webHostEnvironment)
     {
         _webHostEnvironment = webHostEnvironment;
@@ -12,55 +13,79 @@ public class FileService : IFileService
 
     public string UploadImage(IFormFile image)
     {
-        if (image.FileName != null)
-        {
-            var fileName = Path.GetFileNameWithoutExtension(image.FileName) + "_" + Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
-            var path = Path.Combine(_webHostEnvironment.WebRootPath + "/images/Oreshki/", fileName);
-            using (var fileStream = new FileStream(path, FileMode.Create))
-            {
-                image.CopyTo(fileStream);
-            }
-            return fileName;
-        }
-        return FileNotFoundException("You haven't included a file");
+        CheckImageFileIsNull(image);
+
+        var fileName = CreateImage(image);
+        return fileName;
     }
 
     public string UpdateImage(IFormFile image, string imageUrl)
     {
-        if (image.FileName != null && image.FileName != null)
-        {
-            var localFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "Oreshki", imageUrl);
-            if (File.Exists(localFolderPath))
-            {
-                File.Delete(localFolderPath);
-            }
-            var fileName = Path.GetFileNameWithoutExtension(image.FileName) + "_" + Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
-            var path = Path.Combine(_webHostEnvironment.WebRootPath + "/images/Oreshki/", fileName);
-            using (var fileStream = new FileStream(path, FileMode.Create))
-            {
-                image.CopyTo(fileStream);
-            }
-            return fileName;
-        }
-        return imageUrl;
+        CheckImageFileIsNull(image);
+
+        CheckImageUrlIsNullOrEmpty(imageUrl);
+
+        DeleteImageIfExists(imageUrl);
+
+        var fileName = CreateImage(image);
+        return fileName;
     }
 
-    public string DeleteImage(string imageUrl)
+    public void DeleteImage(string imageUrl)
     {
-        if (imageUrl != null)
-        {
-            var localFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "Oreshki", imageUrl);
-            if (File.Exists(localFolderPath))
-            {
-                File.Delete(localFolderPath);
-            }
-            return imageUrl;
-        }
-        return FileNotFoundException("You haven't included a file");
+        CheckImageUrlIsNullOrEmpty(imageUrl);
+
+        DeleteImageIfExists(imageUrl);
     }
 
-    private string FileNotFoundException(string message)
+    private void CheckImageFileIsNull(IFormFile image)
     {
-        return message;
+        if (image.FileName == null)
+        {
+            throw new ArgumentException(nameof(image), "You haven't included a file");
+        }
+    }
+
+    private void CheckImageUrlIsNullOrEmpty(string imageUrl)
+    {
+        if (string.IsNullOrEmpty(imageUrl))
+        {
+            throw new ArgumentException(nameof(imageUrl), "This file doesn't exist");
+        }
+    }
+
+    private string GetUniqueFileName(string fileName)
+    {
+        return Path.GetFileNameWithoutExtension(fileName) + "_" + Guid.NewGuid().ToString() 
+            + Path.GetExtension(fileName);
+    }
+
+    private string GetImagePath(string fileName)
+    {
+        return Path.Combine(_webHostEnvironment.WebRootPath + "/images/Oreshki/", fileName);
+    }
+
+    private void DeleteImageIfExists(string imageUrl)
+    {
+        var imagePath = GetImagePath(imageUrl);
+
+        if (File.Exists(imagePath))
+        {
+            File.Delete(imagePath);
+        }
+    }
+
+    private string CreateImage(IFormFile image)
+    {
+        var fileName = GetUniqueFileName(image.FileName);
+
+        var path = GetImagePath(fileName);
+
+        using (var fileStream = new FileStream(path, FileMode.Create))
+        {
+            image.CopyTo(fileStream);
+        }
+
+        return fileName;
     }
 }
