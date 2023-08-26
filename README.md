@@ -47,12 +47,17 @@ This application showcases:
     ```
 This would launch the Homepage of the application. Navigate the application - **Home** - **Order Online** - **Menu** - **Privacy** - **Products** - **Register** - **Login**
 
+
 <img width="960" alt="Screenshot 2023-08-26 000400" src="https://github.com/VIbanichuka/WallnutCookiesDelivery/assets/94909597/7728cfa9-fcd6-46d9-a6d7-11f3003ce6e4">
+
 
 This is the menu page: Add your favourite cookies to the cart or customize your cookies:
 
+
 <img width="960" alt="Screenshot 2023-08-26 002128" src="https://github.com/VIbanichuka/WallnutCookiesDelivery/assets/94909597/d720bb0b-1026-40c8-8f9f-484e64ebf570">
 
-The product page can only be accessed by the admin. This is page where the admin manages the products displayed on the application:
+
+The product page can only be accessed by the admin. This is the page where the admin manages the cookies displayed on the Menu page:
+
 
 <img width="960" alt="Screenshot 2023-08-26 002935" src="https://github.com/VIbanichuka/WallnutCookiesDelivery/assets/94909597/70fe05a0-6c22-40d3-ba03-28c6bc24f949">
